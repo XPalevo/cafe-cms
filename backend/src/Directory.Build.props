@@ -1,0 +1,15 @@
+<Project>
+
+    <PropertyGroup
+            Condition="!$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(MSBuildProjectDirectory)'))).Equals('Modules'))">
+        <BaseOutputPath>..\..\build\bin\$(MSBuildProjectName)\</BaseOutputPath>
+        <BaseIntermediateOutputPath>..\..\build\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    </PropertyGroup>
+
+    <PropertyGroup
+            Condition="$([System.IO.Path]::GetFileName($([System.IO.Path]::GetDirectoryName('$(MSBuildProjectDirectory)'))).Equals('Modules'))">
+        <BaseOutputPath>..\..\..\build\bin\Modules\$(MSBuildProjectName)\</BaseOutputPath>
+        <BaseIntermediateOutputPath>..\..\..\build\obj\Modules\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    </PropertyGroup>
+
+</Project>

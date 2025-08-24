@@ -1,0 +1,20 @@
+services:
+  aspnet-server:
+    container_name: aspnet-server
+    image: aspnet-server:latest
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/Development.Server.Dockerfile
+    ports:
+      - "7777:7777"
+    restart: unless-stopped
+    
+  kafka-broker:
+    image: apache/kafka:latest
+    container_name: kafka-broker
+    env_file:
+      - ../config/.Development.env
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    restart: unless-stopped

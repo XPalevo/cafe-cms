@@ -1,0 +1,15 @@
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\bin\Application\Release\net8.0\linux-x64\Application
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\bin\Application\Release\net8.0\linux-x64\Application.deps.json
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\bin\Application\Release\net8.0\linux-x64\Application.runtimeconfig.json
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\bin\Application\Release\net8.0\linux-x64\Application.dll
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\bin\Application\Release\net8.0\linux-x64\Application.pdb
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.AssemblyInfoInputs.cache
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.AssemblyInfo.cs
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.csproj.CoreCompileInputs.cache
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.sourcelink.json
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.dll
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\refint\Application.dll
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.pdb
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\Application.genruntimeconfig.cache
+D:\PROJECTS\JetBrains\cafe-cms\backend\build\obj\Application\Release\net8.0\linux-x64\ref\Application.dll
