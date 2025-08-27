@@ -1,0 +1,14 @@
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.csproj.AssemblyReference.cache
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.AssemblyInfoInputs.cache
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.AssemblyInfo.cs
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.csproj.CoreCompileInputs.cache
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.sourcelink.json
+D:\PROJECTS\cafe-cms\backend\build\bin\Modules\TestA\Release\net8.0\TestA.deps.json
+D:\PROJECTS\cafe-cms\backend\build\bin\Modules\TestA\Release\net8.0\TestA.dll
+D:\PROJECTS\cafe-cms\backend\build\bin\Modules\TestA\Release\net8.0\TestA.pdb
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.csproj.Up2Date
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.dll
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\refint\TestA.dll
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\TestA.pdb
+D:\PROJECTS\cafe-cms\backend\build\obj\Modules\TestA\Release\net8.0\ref\TestA.dll

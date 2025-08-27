@@ -1,10 +1,12 @@
 ﻿namespace Common.Services.EventBroker.Core.Ports;
 
+using Common.Services.EventBroker.Core.Entities;
+
 public interface IEventBroker
 {
-    Task PublishAsync(string topic, string name, object payload);
-
-    void Subscribe(string topic, Func<string, Task> handler);
-
-    void Unsubscribe(string topic, Func<string, Task> handler);
+    Task<bool> PublishAsync(EventEntity eventEntity);
+    
+    void Subscribe(string topic, Func<EventEntity, Task> handler);
+    
+    void Unsubscribe(string topic, Func<EventEntity, Task> handler);
 }

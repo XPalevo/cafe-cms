@@ -1,20 +1,47 @@
+networks:
+  app-network:
+    driver: bridge
+
 services:
   aspnet-server:
     container_name: aspnet-server
     image: aspnet-server:latest
+    env_file:
+      - ../config/.Development.env
     build:
       context: ..
       dockerfile: docker/dockerfiles/Development.Server.Dockerfile
     ports:
       - "7777:7777"
+    depends_on:
+      - kafka-broker
+      - schema-registry
+    networks:
+      - app-network
     restart: unless-stopped
-    
+  
   kafka-broker:
-    image: apache/kafka:latest
+    image: confluentinc/cp-kafka:latest
     container_name: kafka-broker
-    env_file:
-      - ../config/.Development.env
     ports:
       - "9092:9092"
       - "9093:9093"
+    env_file:
+      - ../config/.Development.env
+    networks:
+      - app-network
+    volumes:
+      - ./data:/var/lib/kafka/data
+        
+  schema-registry:
+    image: confluentinc/cp-schema-registry:latest
+    container_name: schema-registry
+    depends_on:
+      - kafka-broker
+    env_file:
+      - ../config/.Development.env
+    ports:
+      - "8081:8081"
+    networks:
+      - app-network
     restart: unless-stopped

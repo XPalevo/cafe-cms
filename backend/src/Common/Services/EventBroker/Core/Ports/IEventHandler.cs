@@ -1,6 +1,10 @@
 ﻿namespace Common.Services.EventBroker.Core.Ports;
 
+using Common.Services.EventBroker.Core.Entities;
+
 public interface IEventHandler
 {
-    Task HandleAsync(string payload);
+    public string EventName { get; }
+
+    Task HandleAsync(EventEntity eventEntity);
 }

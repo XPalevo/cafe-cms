@@ -1,29 +1,42 @@
 ﻿namespace Common.Services.EventBroker.Core.Entities;
 
 using Common.Entities;
+using Avro.Generic;
 
 public class EventEntity : BaseEntity
 {
-    public int Version { get; } = 1;
-    
     public string Topic { get; }
-    
     public string Name { get; }
+    public byte[] Payload { get; }
+    public int SchemaId { get; }
     
-    public string Payload  { get; }
-    
-    public bool IsProcessed { get; private set; } =  false;
+    public GenericRecord? DeserializedRecord { get; set; }
+    public EventStatus Status { get; private set; } = EventStatus.New;
 
-    public void SetProcessed()
+    public void MarkProcessed()
     {
-        this.IsProcessed = true;
-        this.SetUpdatedAt();
+        Status = EventStatus.Processed;
+        SetUpdatedAt();
     }
 
-    public EventEntity(string topic, string name, string payload)
+    public void MarkFailed()
     {
-        this.Topic = topic;
-        this.Name = name;
-        this.Payload = payload;
+        Status = EventStatus.Failed;
+        SetUpdatedAt();
     }
+
+    public EventEntity(string topic, string name, byte[] payload, int schemaId)
+    {
+        SchemaId = schemaId;
+        Topic = topic;
+        Name = name;
+        Payload = payload;
+    }
+}
+
+public enum EventStatus
+{
+    New,
+    Processed,
+    Failed
 }
