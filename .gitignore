@@ -14,3 +14,6 @@ server/publisher
 
 # Logs
 **/*.log
+
+# Docker data
+**/docker/data
