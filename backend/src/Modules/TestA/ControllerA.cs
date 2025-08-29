@@ -20,10 +20,24 @@ public class ControllerA : ControllerBase
 
         return Ok(new { message = "Order sent" });
     }
+    
+    [HttpPost("comment-order")]
+    public async Task<IActionResult> CommentOrder([FromBody] CommentOrderRequest request)
+    {
+        await _serviceA.CommentOrder(request.Id, request.Message);
+
+        return Ok(new { message = "Order commented" });
+    }
 }
 
 public class SendOrderRequest
 {
     public int Id { get; set; }
     public string? Description { get; set; }
+}
+
+public class CommentOrderRequest
+{
+    public int Id { get; set; }
+    public required string Message { get; set; }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Confluent.SchemaRegistry;
@@ -18,14 +19,14 @@ public class KafkaEventBroker : IEventBroker, IDisposable
     private readonly IProducer<string, byte[]> _producer;
     private readonly CachedSchemaRegistryClient _schemaRegistry;
 
-    private readonly ConcurrentDictionary<string, ConcurrentDictionary<Func<EventEntity, Task>, byte>> 
-        _subscriptions = new();
-
+    private readonly ConcurrentDictionary<string, ConcurrentDictionary<Func<EventEntity, Task>, byte>> _subscriptions = new();
     private readonly ConcurrentDictionary<string, Task> _consumerTasks = new();
     private readonly CancellationTokenSource _cts = new();
 
     private readonly ConcurrentDictionary<int, RecordSchema> _schemaCache = new();
     private readonly string _bootstrapServers;
+
+    private readonly Channel<EventEntity> _channel = Channel.CreateUnbounded<EventEntity>();
 
     public KafkaEventBroker(string bootstrapServers, string schemaRegistryUrl)
     {
@@ -33,16 +34,21 @@ public class KafkaEventBroker : IEventBroker, IDisposable
 
         _producer = new ProducerBuilder<string, byte[]>(new ProducerConfig
         {
-            BootstrapServers = bootstrapServers
+            BootstrapServers = bootstrapServers,
+            LingerMs = 5,
+            BatchSize = 64 * 1024,
+            CompressionType = CompressionType.Zstd
         }).Build();
 
         _schemaRegistry = new CachedSchemaRegistryClient(new SchemaRegistryConfig
         {
             Url = schemaRegistryUrl
         });
+
+        Task.Run(() => DispatchLoop(_cts.Token));
     }
 
-    public async Task<bool> PublishAsync(EventEntity eventEntity)
+    public Task<bool> PublishAsync(EventEntity eventEntity)
     {
         try
         {
@@ -57,13 +63,13 @@ public class KafkaEventBroker : IEventBroker, IDisposable
                 }
             };
 
-            await _producer.ProduceAsync(eventEntity.Topic, message);
-            return true;
+            _producer.Produce(eventEntity.Topic, message);
+            return Task.FromResult(true);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Publish failed: {ex.Message}");
-            return false;
+            return Task.FromResult(false);
         }
     }
 
@@ -72,7 +78,8 @@ public class KafkaEventBroker : IEventBroker, IDisposable
         var handlers = _subscriptions.GetOrAdd(topic, _ => new ConcurrentDictionary<Func<EventEntity, Task>, byte>());
         handlers.TryAdd(handler, 0);
 
-        _consumerTasks.GetOrAdd(topic, _ => Task.Run(() => StartConsumerLoop(topic, _cts.Token)));
+        _consumerTasks.GetOrAdd(topic, _ =>
+            Task.Run(() => StartConsumerGroup(topic, _cts.Token)));
     }
 
     public void Unsubscribe(string topic, Func<EventEntity, Task> handler)
@@ -83,13 +90,29 @@ public class KafkaEventBroker : IEventBroker, IDisposable
         }
     }
 
+    private async Task StartConsumerGroup(string topic, CancellationToken ct)
+    {
+        int consumerCount = Math.Max(1, Environment.ProcessorCount / 2);
+
+        var tasks = new Task[consumerCount];
+        for (int i = 0; i < consumerCount; i++)
+        {
+            tasks[i] = Task.Run(() => StartConsumerLoop(topic, ct));
+        }
+
+        await Task.WhenAll(tasks);
+    }
+
     private async Task StartConsumerLoop(string topic, CancellationToken ct)
     {
         var consumerConfig = new ConsumerConfig
         {
             BootstrapServers = _bootstrapServers,
             GroupId = $"group-{topic}",
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            EnableAutoCommit = true,
+            FetchMinBytes = 1_048_576,
+            FetchWaitMaxMs = 100
         };
 
         using var consumer = new ConsumerBuilder<string, byte[]>(consumerConfig).Build();
@@ -126,35 +149,17 @@ public class KafkaEventBroker : IEventBroker, IDisposable
                         deserializedRecord = reader.Read(null, decoder);
                     }
 
-                    if (_subscriptions.TryGetValue(topic, out var handlers))
+                    var evt = new EventEntity(
+                        topic: topic,
+                        name: eventName,
+                        payload: cr.Message.Value,
+                        schemaId: schemaId
+                    )
                     {
-                        EventEntity evt = new EventEntity(
-                            topic: topic,
-                            name: eventName,
-                            payload: cr.Message.Value,
-                            schemaId: schemaId
-                        )
-                        {
-                            DeserializedRecord = deserializedRecord
-                        };
+                        DeserializedRecord = deserializedRecord
+                    };
 
-                        foreach (var handler in handlers.Keys)
-                        {
-                            _ = Task.Run(async () =>
-                            {
-                                try
-                                {
-                                    await handler(evt);
-                                    evt.MarkProcessed();
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Handler failed: {ex}");
-                                    evt.MarkFailed();
-                                }
-                            });
-                        }
-                    }
+                    await _channel.Writer.WriteAsync(evt, ct);
                 }
                 catch (ConsumeException e)
                 {
@@ -168,9 +173,43 @@ public class KafkaEventBroker : IEventBroker, IDisposable
         }
     }
 
+    private async Task DispatchLoop(CancellationToken ct)
+    {
+        var semaphore = new SemaphoreSlim(Environment.ProcessorCount * 2);
+
+        await foreach (var evt in _channel.Reader.ReadAllAsync(ct))
+        {
+            if (_subscriptions.TryGetValue(evt.Topic, out var handlers))
+            {
+                foreach (var handler in handlers.Keys)
+                {
+                    await semaphore.WaitAsync(ct);
+                    _ = Task.Run(async () =>
+                    {
+                        try
+                        {
+                            await handler(evt);
+                            evt.MarkProcessed();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Handler failed: {ex}");
+                            evt.MarkFailed();
+                        }
+                        finally
+                        {
+                            semaphore.Release();
+                        }
+                    }, ct);
+                }
+            }
+        }
+    }
+
     public void Dispose()
     {
         _cts.Cancel();
+        _producer.Flush();
         _producer.Dispose();
         _schemaRegistry.Dispose();
     }

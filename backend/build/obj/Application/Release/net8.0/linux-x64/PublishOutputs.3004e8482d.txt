@@ -1,5 +1,0 @@
-D:\PROJECTS\JetBrains\cafe-cms\backend\publisher\Application
-D:\PROJECTS\JetBrains\cafe-cms\backend\publisher\Application.dll
-D:\PROJECTS\JetBrains\cafe-cms\backend\publisher\Application.deps.json
-D:\PROJECTS\JetBrains\cafe-cms\backend\publisher\Application.runtimeconfig.json
-D:\PROJECTS\JetBrains\cafe-cms\backend\publisher\Application.pdb
