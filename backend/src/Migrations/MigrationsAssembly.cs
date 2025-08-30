@@ -1,5 +1,6 @@
 ﻿namespace Migrations;
 
-public class MigrationsAssembly
+public static class MigrationsAssembly
 {
+    public static string? AssemblyName = typeof(MigrationsAssembly).Assembly.FullName;
 }

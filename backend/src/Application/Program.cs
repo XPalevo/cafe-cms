@@ -9,7 +9,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAuth(new(),
     options => options.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=root",
-        x => x.MigrationsAssembly(typeof(MigrationsAssembly).Assembly.FullName)));
+        x => x.MigrationsAssembly(MigrationsAssembly.AssemblyName)));
 
 builder.Services.AddAuthEndpoints();
 
