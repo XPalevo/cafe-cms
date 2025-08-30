@@ -5,33 +5,39 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{AE1B0F85-72E0-4E07-A904-A9186A3F468C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{F87AE385-086F-4083-9481-B7E2EFFB1C1E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{D72F62E1-269D-4079-8D4C-015B477AE76B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth", "Modules\Auth\Auth.csproj", "{50FA6282-632E-48D4-A513-90E7132D2DCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application", "Application\Application.csproj", "{17D235C2-CE59-4FA6-B112-0B3D387EE424}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "Migrations\Migrations.csproj", "{658229A0-8781-494F-B8F8-50E4046F5CBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AE1B0F85-72E0-4E07-A904-A9186A3F468C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AE1B0F85-72E0-4E07-A904-A9186A3F468C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE1B0F85-72E0-4E07-A904-A9186A3F468C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE1B0F85-72E0-4E07-A904-A9186A3F468C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F87AE385-086F-4083-9481-B7E2EFFB1C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F87AE385-086F-4083-9481-B7E2EFFB1C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F87AE385-086F-4083-9481-B7E2EFFB1C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F87AE385-086F-4083-9481-B7E2EFFB1C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{50FA6282-632E-48D4-A513-90E7132D2DCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50FA6282-632E-48D4-A513-90E7132D2DCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50FA6282-632E-48D4-A513-90E7132D2DCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50FA6282-632E-48D4-A513-90E7132D2DCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17D235C2-CE59-4FA6-B112-0B3D387EE424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17D235C2-CE59-4FA6-B112-0B3D387EE424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17D235C2-CE59-4FA6-B112-0B3D387EE424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17D235C2-CE59-4FA6-B112-0B3D387EE424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{658229A0-8781-494F-B8F8-50E4046F5CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{658229A0-8781-494F-B8F8-50E4046F5CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{658229A0-8781-494F-B8F8-50E4046F5CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{658229A0-8781-494F-B8F8-50E4046F5CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{50FA6282-632E-48D4-A513-90E7132D2DCF} = {D72F62E1-269D-4079-8D4C-015B477AE76B}

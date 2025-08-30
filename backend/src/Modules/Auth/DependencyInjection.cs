@@ -2,15 +2,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Auth.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Builder;
+using Common.Services.Endpoints;
 
 namespace Auth;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddAuth<TDbContext>(this IServiceCollection services, JwtOptions jwtOptions)
-        where TDbContext : DbContext
+    public static IServiceCollection AddAuth(this IServiceCollection services, JwtOptions jwtOptions, Action<DbContextOptionsBuilder> optionsBuilderAction)
     {
         services.AddAuthentication().AddJwtBearer(x =>
         {
@@ -30,9 +29,11 @@ public static class DependencyInjection
 
         services.AddAuthorization();
 
+        services.AddDbContext<AuthDbContext>(optionsBuilderAction);
+
         services.AddIdentityCore<AppUser>()
             .AddRoles<AppRole>()
-            .AddEntityFrameworkStores<TDbContext>();
+            .AddEntityFrameworkStores<AuthDbContext>();
             // .AddUserManager<UserManager<AppUser>>()
             // .AddRoleManager<RoleManager<AppRole>>()
             // .AddSignInManager();
@@ -55,6 +56,7 @@ public static class DependencyInjection
 
     public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder builder)
     {
+        // builder.MapEndpoints(typeof(DependencyInjection).Assembly);
         builder.MapIdentityApi<AppUser>();
         return builder;
     }
