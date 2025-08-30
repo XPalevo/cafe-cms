@@ -2,5 +2,5 @@
 
 public static class MigrationsAssembly
 {
-    public static string? AssemblyName = typeof(MigrationsAssembly).Assembly.FullName;
+    public static readonly string? AssemblyName = typeof(MigrationsAssembly).Assembly.FullName;
 }
